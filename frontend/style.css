@@ -1,0 +1,20 @@
+/** @format */
+
+body {
+    height: 100vh;
+    background-color: #ffeedf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-size: 200px;
+    font-family: "Montserrat", sans-serif;
+    color: white;
+    background-color: #1c5a4e;
+    min-width: 240px;
+    min-height: 240px;
+    border-radius: 50%;
+    border: none;
+}
