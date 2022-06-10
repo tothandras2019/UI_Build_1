@@ -1,33 +1,34 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+/** @format */
+
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
 const mediaTypes = {
-	"html": "text/html",
-	"jpeg": "image/jpeg",
-	"jpg": "image/jpeg",
-	"png": "image/png",
-	"svg": "image/svg+xml",
-	"json": "application/json",
-	"js": "text/javascript",
-	"css": "text/css",
-	"csv": "text/csv",
-	"mp3": "audio/mpeg",
-	"mp4": "video/mp4",
-	"oga": "audio/ogg",
-	"ogv": "video/ogg",
-	"pdf": "application/pdf",
-	"weba": "audio/webm",
-	"webm": "video/webm",
-	"webp": "image/webp",
-	"woff": "font/woff",
-	"woff2": "font/woff2",
-	"ttf": "font/ttf",
-	"gif": "image/gif"
+    html: "text/html",
+    jpeg: "image/jpeg",
+    jpg: "image/jpeg",
+    png: "image/png",
+    svg: "image/svg+xml",
+    json: "application/json",
+    js: "text/javascript",
+    css: "text/css",
+    csv: "text/csv",
+    mp3: "audio/mpeg",
+    mp4: "video/mp4",
+    oga: "audio/ogg",
+    ogv: "video/ogg",
+    pdf: "application/pdf",
+    weba: "audio/webm",
+    webm: "video/webm",
+    webp: "image/webp",
+    woff: "font/woff",
+    woff2: "font/woff2",
+    ttf: "font/ttf",
+    gif: "image/gif",
 };
 
 const server = http.createServer((req, res) => {
-
-	const errorHTML = `
+    const errorHTML = `
 		
 	<!DOCTYPE html>
 	<html lang="en">
@@ -63,37 +64,41 @@ const server = http.createServer((req, res) => {
 	</html>
 	
 	`;
-    
-	let filePath = path.resolve(__dirname + '/../frontend' + req.url);
-    
-	fs.access(filePath, fs.constants.R_OK, (err) => {
-	if(err){
-		res.statusCode = 404;
-		res.end(errorHTML);
-	}else{
-		if(fs.statSync(filePath).isDirectory()) {
-			filePath += '/index.html';
-		}
-		fs.readFile(filePath, "binary", (err, data) => {
-			if(err) {
-				res.statusCode = 500;
-				res.end(errorHTML);
-			} else {
-				let mediaType = mediaTypes[filePath.split('.').pop()];
-      
-				if (!mediaType) {
-					mediaType = 'text/plain';
-				}
-				res.writeHead(200, { "Content-Type": mediaType });
-				res.write(data, "binary");
-				res.end();
-			}
-		});
-	}
-	});
+
+    let filePath = path.resolve(__dirname + "/../frontend" + req.url);
+
+    fs.access(filePath, fs.constants.R_OK, (err) => {
+        if (err) {
+            res.statusCode = 404;
+            res.end(errorHTML);
+        } else {
+            if (fs.statSync(filePath)
+                .isDirectory()) {
+                filePath += "/index.html";
+            }
+            fs.readFile(filePath, "binary", (err, data) => {
+                if (err) {
+                    res.statusCode = 500;
+                    res.end(errorHTML);
+                } else {
+                    let mediaType = mediaTypes[filePath.split(".")
+                        .pop()];
+
+                    if (!mediaType) {
+                        mediaType = "text/plain";
+                    }
+                    res.writeHead(200, {
+                        "Content-Type": mediaType,
+                    });
+                    res.write(data, "binary");
+                    res.end();
+                }
+            });
+        }
+    });
 });
 
 server.listen(9000, "127.0.0.1", () => {
     const addr = server.address();
-		console.log(`http://${addr.address}:${addr.port}`);
+    console.log(`http://${addr.address}:${addr.port}`);
 });
